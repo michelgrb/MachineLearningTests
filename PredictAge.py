@@ -100,7 +100,7 @@ def getOutput(lr_results, trainData, nearestNeighborsModel, randomForestModel):
     plt.plot(trainData.get_y_train(), p(trainData.get_y_train()), '#0F275C')
 
     plt.ylabel('Prediction Age')
-    plt.xlabel('Experimental Age')
+    plt.xlabel('Experimental Age \n\n Red: randomForestModel Blue: nearestNeighborsModel')
 
     plt.show()
 
