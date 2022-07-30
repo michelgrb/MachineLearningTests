@@ -99,8 +99,8 @@ def getOutput(lr_results, trainData, nearestNeighborsModel, randomForestModel):
     p = np.poly1d(z)
     plt.plot(trainData.get_y_train(), p(trainData.get_y_train()), '#0F275C')
 
-    plt.ylabel('Prediction l_feucht_200')
-    plt.xlabel('Experimental l_feucht_200')
+    plt.ylabel('Prediction Age')
+    plt.xlabel('Experimental Age')
 
     plt.show()
 
