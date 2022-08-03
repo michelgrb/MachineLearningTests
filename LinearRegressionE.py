@@ -3,12 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
-import matplotlib.pyplot as plt
-import numpy as np
-import sklearn
 import TrainingData
 import TrainModel
-
+import PlotObject
 
 def getData(x, y):
     x_train, x_test, y_train, y_test = train_test_split(
@@ -48,33 +45,17 @@ def RandomFor(trainData):
     return randomForestModel
 
 def createDataFrame(randomForestModel):
-    lr_results = pd.DataFrame({'Linear Regression': [randomForestModel.get_train_mse(), randomForestModel.get_train_r2(), randomForestModel.get_test_mse(), randomForestModel.get_test_r2()]})
+    lr_results = pd.DataFrame({'Linear Regression with e_Mbh': [randomForestModel.get_train_mse(), randomForestModel.get_train_r2(), randomForestModel.get_test_mse(), randomForestModel.get_test_r2()]})
     lr_results.index = ['Training MSE', 'Training R2', 'Test MSE', 'Test R2']
     return lr_results
 
 
-def getOutput(lr_results, trainData, randomForestModel):
-    print(lr_results)
-
-    plt.scatter(x=trainData.get_y_test(),
-                y=randomForestModel.get_test_prediction(), alpha=0.3, color='red')
-
-    z = np.polyfit(trainData.get_y_test(), randomForestModel.get_test_prediction(), 1)
-    p = np.poly1d(z)
-    plt.plot(trainData.get_y_train(), p(trainData.get_y_train()), '#DD6868')
-
-    plt.ylabel('Prediction Age')
-    plt.xlabel('Experimental Age')
-
-    plt.show()
-
-
 def main():
-    dataset = pd.read_csv('Data/asu(3).csv', sep=';')
+    dataset = pd.read_csv('Data/BlackHoles.csv', sep=';')
     dataset = dataset.fillna(0)
 
-    y = dataset['F606W-F814W']
-    x = dataset.drop(['F606W-F814W', 'MType', 'M'], axis=1)
+    y = dataset['Mbh']
+    x = dataset[['GLON', 'GLAT', 'Dist', 'z', 'e_Mbh']]
 
     trainData = getData(x, y)
 
@@ -82,7 +63,11 @@ def main():
 
     lr_results = createDataFrame(randomForestModel)
 
-    getOutput(lr_results, trainData, randomForestModel)
+    PLTObject = PlotObject.PLTData()
+    PLTObject.set_model(randomForestModel)
+    PLTObject.set_trainData(trainData)
+    PLTObject.set_lr_results(lr_results)
+    return PLTObject
 
 
 if __name__ == "__main__":
